@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast</title>
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: rgb(55, 48, 48);
+    background-image: url("https://www.rochesterfirst.com/wp-content/uploads/sites/66/2021/04/sky-1107579_1920.jpg");
+
+}
+
+.weather-app {
+    text-align: center;
+    background-color: rgba(251, 249, 249, 0.484);
+    background-size: cover;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.search-box {
+    margin-bottom: 20px;
+}
+
+#cityInput {
+    padding: 10px;
+    width: 200px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#searchBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+#searchBtn:hover {
+    background-color: #0056b3;
+}
+
+.weather-info {
+    margin-top: 20px;
+}
+
+  </style>
+</head>
+<body>
+    <div class="weather-app">
+        <h1>Weather Forecast</h1>
+        <div class="search-box">
+            <input type="text" id="cityInput" placeholder="Enter city name">
+            <button id="searchBtn">Search</button>
+        </div>
+        <div class="weather-info">
+            <h2 id="cityName">City Name</h2>
+            <p id="temperature">Temperature: --°C</p>
+            <p id="description">Description: --</p>
+            <p id="humidity">Humidity: --%</p>
+            <p id="windSpeed">Wind Speed: -- m/s</p>
+        </div>
+    </div>
+    <script>
+	document.getElementById('searchBtn').addEventListener('click', function() {
+    const city = document.getElementById('cityInput').value;
+    fetchWeatherData(city);
+});
+
+async function fetchWeatherData(city) {
+    const apiKey = '38fb456e0f56e3fc346601b8b4a479ea'; // Replace with your OpenWeatherMap API key
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('City not found');
+        }
+        const data = await response.json();
+        displayWeatherData(data);
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+function displayWeatherData(data) {
+    document.getElementById('cityName').textContent = data.name;
+    document.getElementById('temperature').textContent = `Temperature: ${data.main.temp}°C`;
+    document.getElementById('description').textContent = `Description: ${data.weather[0].description}`;
+    document.getElementById('humidity').textContent = `Humidity: ${data.main.humidity}%`;
+    document.getElementById('windSpeed').textContent = `Wind Speed: ${data.wind.speed} m/s`;
+}
+
+	</script>
+</body>
+</html>
